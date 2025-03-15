@@ -8,3 +8,6 @@ Install dependencies
 To start the development server
 - yarn start
 
+
+# Testing
+- yarn test
