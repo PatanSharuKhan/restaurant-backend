@@ -14,7 +14,7 @@
     "debug": "~4.4.0",
     "dotenv": "^16.4.7",
     "express": "~4.21.2",
-    "http-errors": "~1.6.3",
+    "http-errors": "~2.0.0",
     "morgan": "~1.10.0"
   },
   "devDependencies": {
