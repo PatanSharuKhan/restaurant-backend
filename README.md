@@ -6,7 +6,7 @@ Install dependencies
 - yarn install
 
 To start the development server
-- yarn start
+- yarn dev:start
 
 
 # Testing

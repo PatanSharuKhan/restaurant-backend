@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon",
+    "dev:start": "nodemon",
     "start": "yarn build && node ./dist/bin/www",
     "build": "tsc",
     "test": "jest",
