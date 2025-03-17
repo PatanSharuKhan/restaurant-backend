@@ -1,19 +1,25 @@
 import { Router } from 'express';
+import User from '../models/user.model';
+import mongoose from 'mongoose';
 const router = Router();
 
-const users = [
-  { id: 1, name: 'Alice', email: 'alice@gmail.com' }
-]
+export interface UserTypes {
+  _id: mongoose.Types.ObjectId,
+  name: string,
+  email: string,
+  password: string
+}
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
+  const users = await User.find({});
   res.status(200).json(users);
 });
 
 /* GET user by id. */
-router.get('/:id', function (req, res, next) {
-  const id = parseInt(req.params.id);
-  const user = users.find(user => user.id === id);
+router.get('/:id', async function (req, res, next) {
+  const id = req.params.id;
+  const user = await User.findById(id);
   if (user) {
     res.status(200).json(user);
   } else {
@@ -22,15 +28,27 @@ router.get('/:id', function (req, res, next) {
 });
 
 /* POST create user. */
-router.post('/', function (req, res, next) {
+router.post('/', async function (req, res, next) {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    res.status(422).json({ message: 'Invalid request' });
-  } else {
-    const newUser = { id: users.length + 1, name, email, password };
-    users.push(newUser);
-    res.status(201).json(newUser);
+
+  const newUser = { name, email, password };
+  try {
+    const user = new User(newUser);
+    await user.save();
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(422).json(err);
   }
 });
+
+router.delete('/:id', async function (req, res, next) {
+  const id = req.params.id;
+  try {
+    await User.findByIdAndDelete(id);
+    res.status(200).json('Delected successfully')
+  } catch (err) {
+    res.status(422).json(err)
+  }
+})
 
 module.exports = router;
