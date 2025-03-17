@@ -6,7 +6,8 @@
     "dev": "nodemon",
     "start": "yarn build && node ./dist/bin/www",
     "build": "tsc",
-    "test": "jest --watchAll"
+    "test": "jest",
+    "dev:test": "jest --watchAll"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
