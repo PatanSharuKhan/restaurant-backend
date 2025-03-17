@@ -2,9 +2,9 @@ name: Build and Test Nodejs App
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
@@ -14,26 +14,46 @@ jobs:
       matrix:
         node-version: [20.x]
 
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build TypeScript Project
+        run: yarn build
+
+      - name: Run Tests
+        run: yarn test
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: build
+
+    if: github.event_name == 'pull_request' # Only run on pull requests
+
     permissions:
       checks: write
       pull-requests: write
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Install Dependencies
-      run: yarn install
+      - name: Install Dependencies
+        run: yarn install
 
-    - name: Build TypeScript Project
-      run: yarn build
+      - name: Run Tests with Coverage
+        run: yarn test
 
-    - name: Run Tests
-      run: yarn test
-
-    - name: Jest coverage report
-      uses: ArtiomTr/jest-coverage-report-action@v2.3.1
+      - name: Jest coverage report
+        uses: ArtiomTr/jest-coverage-report-action@v2.3.1
