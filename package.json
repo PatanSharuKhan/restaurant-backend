@@ -6,7 +6,7 @@
     "dev:start": "nodemon",
     "start": "yarn build && node ./dist/bin/www",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --coverage",
     "dev:test": "jest --watchAll"
   },
   "dependencies": {
