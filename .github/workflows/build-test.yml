@@ -14,6 +14,10 @@ jobs:
       matrix:
         node-version: [20.x]
 
+    permissions:
+      checks: write
+      pull-requests: write
+
     steps:
     - uses: actions/checkout@v4
 
