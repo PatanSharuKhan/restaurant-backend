@@ -6,4 +6,5 @@ export default {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     testMatch: ['**/*.test.ts'],
+    setupFilesAfterEnv: ['./setup-jest.ts']
 }

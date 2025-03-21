@@ -1,27 +1,30 @@
-import mongoose from 'mongoose';
 import request from 'supertest';
 var app = require('../app');
 import User from '../models/user.model'
 import { UserTypes } from './users'
+import { connectDB, disconnectDB } from '../db/db'
 
 describe('Users API', () => {
     let testUser: UserTypes;
 
     beforeAll(async () => {
-        testUser = await User.create({
-            name: 'Alice',
-            email: 'alice@gmail.com',
-            password: 'test123'
-        })
+        try {
+            await connectDB()
+            testUser = await User.create({
+                name: 'Alice',
+                email: 'alice@gmail.com',
+                password: 'test123'
+            })
+        } catch (err) {
+            console.error('Error connecting to Database:', err)
+        }
     })
 
     afterAll(async () => {
         try {
-            await User.findByIdAndDelete(testUser._id);
+            await disconnectDB()
         } catch (err) {
-            console.log(err)
-        } finally {
-            await mongoose.connection.close();
+            console.error('Error disconnecting the database.', err)
         }
     })
 

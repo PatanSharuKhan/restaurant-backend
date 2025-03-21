@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+import { connectDB } from "../db/db";
 var app = require('../app');
 var debug = require('debug')('restaurant-backend:server');
 var http = require('http');
@@ -24,10 +25,14 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+connectDB().then(() => {
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}).catch((err) => {
+  console.error('Failed to connect to database:', err);
+  process.exit(1);
+})
 
 /**
  * Normalize a port into a number, string, or false.
