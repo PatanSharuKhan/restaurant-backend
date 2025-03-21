@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require("mongoose");
+import { MongoMemoryServer } from 'mongodb-memory-server'
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
@@ -23,12 +24,20 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // Connect to MongoDB
-mongoose.connect(process.env.RESTAURANT_DATABASE_URL).then(() => {
-  console.log("Connected to MongoDB");
-}).catch((err: Error) => {
-  console.log("Error connecting to MongoDB", err);
+const connectDB = async () => {
+  let dbUrl = process.env.RESTAURANT_DATABASE_URL
+  if (process.env.ENVIRONMENT === 'test') {
+    dbUrl = (await MongoMemoryServer.create()).getUri()
+  }
+
+  mongoose.connect(dbUrl).then(() => {
+    console.log("Connected to MongoDB");
+  }).catch((err: Error) => {
+    console.log("Error connecting to MongoDB", err);
+  }
+  );
 }
-);
+connectDB();
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {
