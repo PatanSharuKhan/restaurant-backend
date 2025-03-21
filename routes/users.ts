@@ -28,7 +28,7 @@ router.get('/:id', async function (req, res, next) {
 });
 
 /* POST create user. */
-router.post('/', async function (req, res, next) {
+router.post('/register', async function (req, res, next) {
   const { name, email, password } = req.body;
 
   const newUser = { name, email, password };
@@ -45,7 +45,7 @@ router.delete('/:id', async function (req, res, next) {
   const id = req.params.id;
   try {
     await User.findByIdAndDelete(id);
-    res.status(200).json('Delected successfully')
+    res.status(200).json('Deleted Successfully')
   } catch (err) {
     res.status(422).json(err)
   }
